@@ -10,16 +10,13 @@ export default class ChainLongWeb3Provider {
       rpcUrl
     } = options
     this.engine = new ProviderEngine()
+    const hookedWallet = new HookedWalletSubProvider(new WalletHooks())
+    this.engine.addProvider(hookedWallet)
     if (rpcUrl) {
       this.engine.addProvider(new RpcSubProvider({
         rpcUrl
       }))
     }
-    const hookedWallet = new HookedWalletSubProvider(new WalletHooks())
-    hookedWallet.sendAsync = hookedWallet.handleRequest
-    hookedWallet.send = hookedWallet.sendAsync
-    this.hookedWallet = hookedWallet
-    this.engine.addProvider(hookedWallet)
     this.engine.start()
     this.web3 = new Web3(this.engine)
     window.web3 = this.web3
