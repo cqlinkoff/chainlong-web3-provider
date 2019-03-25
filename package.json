@@ -1,0 +1,61 @@
+{
+  "name": "@cqlinkoff/chainlong-web3-provider",
+  "version": "1.0.0",
+  "description": "web3 provider for ChainLong Pay",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "scripts": {
+    "pretest": "npm run lint",
+    "test": "jest --no-cache",
+    "lint": "npm run lint:js",
+    "lint:js": "eslint ./src/**",
+    "prebuild": "npm run test",
+    "build": "npm run build:es && npm run build:commonjs && npm run build:umd",
+    "build:commonjs": "BABEL_ENV=commonjs babel src -d lib",
+    "build:es": "BABEL_ENV=es babel src -d es",
+    "build:umd": "webpack",
+    "prepare": "npm run build",
+    "preversion": "npm run build",
+    "coverage": "cat ./coverage/lcov.info | coveralls"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cqlinkoff/chainlong-web3-provider.git"
+  },
+  "keywords": [
+    "web3",
+    "provider",
+    "ChainLongPay"
+  ],
+  "author": "kagawagao <kingsongao1221@gmail.com> (https://kingsongao.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cqlinkoff/chainlong-web3-provider/issues"
+  },
+  "homepage": "https://github.com/cqlinkoff/chainlong-web3-provider#readme",
+  "dependencies": {
+    "@cqlinkoff/wk-bridge": "^1.0.2",
+    "web3": "1.0.0-beta.37",
+    "web3-provider-engine": "^14.2.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.4.0",
+    "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.5.0",
+    "babel-loader": "^8.0.5",
+    "eslint": "^5.15.3",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "jest": "^24.5.0",
+    "terser-webpack-plugin": "^1.2.3",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0",
+    "webpackbar": "^3.1.5"
+  }
+}
