@@ -6,17 +6,6 @@ export default class WalletHooks {
     })
     this.accounts = [address]
   }
-  serializeResponse = (result) => {
-    const data = {
-      jsonrpc: '2.0'
-    }
-    if (typeof result === 'object' && result.jsonrpc && result.result) {
-      data.result = result.result
-    } else {
-      data.result = result
-    }
-    return data
-  }
   getAccounts = (cb) => {
     cb(null, this.accounts)
   }
