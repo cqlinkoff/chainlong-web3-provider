@@ -1,29 +1,56 @@
-import * as ProviderEngine from 'web3-provider-engine'
-import * as RpcSubProvider from 'web3-provider-engine/subproviders/rpc'
-import * as HookedWalletSubProvider from 'web3-provider-engine/subproviders/hooked-wallet'
-import * as SubscriptionsSubProvider from 'web3-provider-engine/subproviders/subscriptions'
 import * as Web3 from 'web3'
-import WalletHooks from './hooks'
+import WKBridge from '@cqlinkoff/wk-bridge'
 
-export default class ChainLongWeb3Provider {
+export default class ChainLongWeb3Provider extends Web3.providers.WebsocketProvider {
   constructor (options = {}) {
-    const { rpcUrl, address } = options
-    this.engine = new ProviderEngine()
-    const hookedWallet = new HookedWalletSubProvider(new WalletHooks(address))
-    this.engine.addProvider(hookedWallet)
-    this.engine.addProvider(new SubscriptionsSubProvider())
-    if (rpcUrl) {
-      this.engine.addProvider(
-        new RpcSubProvider({
-          rpcUrl
-        })
-      )
-    }
-    this.engine.start()
-    this.web3 = new Web3(this.engine)
-    window.web3 = this.web3
+    const { rpcUrl } = options
+    const netName = rpcUrl.split('.')[0].split('//').pop()
+    const websocketUrl = `wss://${netName}.infura.io/ws`
+    super(websocketUrl)
+    this.bridge = new WKBridge({
+      namespace: 'dApp'
+    })
+
     window.Web3 = Web3
   }
-}
 
-window.ChainLongWeb3Provider = ChainLongWeb3Provider
+  send = (payload, callback) => {
+    if (this.connection.readyState === this.connection.CONNECTING) {
+      setTimeout(() => {
+        this.send(payload, callback)
+      }, 10)
+      return
+    }
+
+    // try reconnect, when connection is gone
+    // if(!this.connection.writable)
+    //     this.connection.connect({url: this.url});
+    if (this.connection.readyState !== this.connection.OPEN) {
+      console.error('connection not open on send()')
+      if (typeof this.connection.onerror === 'function') {
+        this.connection.onerror(new Error('connection not open'))
+      } else {
+        console.error('no error callback')
+      }
+      callback(new Error('connection not open'))
+      return
+    }
+    switch (payload.method) {
+      case 'eth_sendTransaction':
+        this.bridge.postMessage('signTransaction', payload.params[0])
+          .then(result => {
+            const response = {
+              jsonrpc: '2.0',
+              id: payload.id
+            }
+            response.result = result
+            callback(null, response)
+          })
+          .catch(err => callback(err, null))
+        break
+      default:
+        this.connection.send(JSON.stringify(payload))
+        this._addResponseCallback(payload, callback)
+    }
+  }
+}

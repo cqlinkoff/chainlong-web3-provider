@@ -7,8 +7,11 @@ module.exports = {
   mode: 'production',
   entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'trust-min.js'
+    library: 'ChainLongWeb3Provider',
+    libraryTarget: 'umd',
+    libraryExport: 'default',
+    path: '/Users/kagawa/workspace/android/QianLong/QianLong/app/src/main/res/raw',
+    filename: 'trust_min.js'
   },
   module: {
     rules: [
