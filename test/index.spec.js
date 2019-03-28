@@ -1,6 +1,12 @@
-import ChainLongWeb3Provider from './index.spec'
+import ChainLongWeb3Provider from '../src'
+import * as Web3 from 'web3'
+
 describe('ChainLongWeb3Provider', () => {
   test('create instance', () => {
-    console.log(ChainLongWeb3Provider)
+    const provider = new ChainLongWeb3Provider({
+      rpcUrl: 'wss://rinkeby.infura.io/ws'
+    })
+    expect(provider).toBeInstanceOf(ChainLongWeb3Provider)
+    expect(provider).toBeInstanceOf(Web3.providers.WebsocketProvider)
   })
 })
