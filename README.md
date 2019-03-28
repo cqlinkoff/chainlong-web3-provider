@@ -1,6 +1,6 @@
 # chainlong-web3-provider
 
-web3 provider base `WebsocketProvider` for ChainLong Pay,
+web3 provider - based on `WebsocketProvider` for ChainLong Pay
 
 ## Install
 
