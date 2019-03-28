@@ -10,8 +10,8 @@ module.exports = {
     library: 'ChainLongWeb3Provider',
     libraryTarget: 'umd',
     libraryExport: 'default',
-    path: '/Users/kagawa/workspace/android/QianLong/QianLong/app/src/main/res/raw',
-    filename: 'trust_min.js'
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'trust-min.js'
   },
   module: {
     rules: [
