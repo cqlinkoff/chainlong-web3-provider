@@ -3,10 +3,7 @@ import WKBridge from '@cqlinkoff/wk-bridge'
 
 export default class ChainLongWeb3Provider extends Web3.providers.WebsocketProvider {
   constructor (options = {}) {
-    const { rpcUrl } = options
-    const netName = rpcUrl.split('.')[0].split('//').pop()
-    const websocketUrl = `wss://${netName}.infura.io/ws`
-    super(websocketUrl)
+    super(options.rpcUrl)
     this.bridge = new WKBridge({
       namespace: 'dApp'
     })
