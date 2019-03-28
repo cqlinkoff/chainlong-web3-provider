@@ -1,5 +1,5 @@
 {
-  "name": "@cqlinkoff/chainlong-web3-provider",
+  "name": "@cqlinkoff/web3-provider",
   "version": "1.0.1",
   "description": "web3 provider for ChainLong Pay",
   "main": "lib/index.js",
